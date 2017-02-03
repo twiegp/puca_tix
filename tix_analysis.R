@@ -1,6 +1,6 @@
 library(tidyverse)
 
-thresholds <- c(10,100,1000,10000)
+thresholds <- c(10,100,1000)
 blacklist.names <- c("500% BONUS ON TIX")
 
 df.tix <- read.csv("tix.csv") %>% filter(!(Name %in% blacklist.names))
@@ -14,7 +14,7 @@ for (i in 1:length(unique(df.tix$Date))) {
   print(date)
   df.date <- filter(df.tix, Date == date) %>% 
     group_by(UID) %>%
-    summarise(Q_Max = sum(Q_Max), Full_Price = max(Full_Price)) %>%
+    summarise(Q_Max = min(max(Q_Max),sum(Q)), Full_Price = max(Full_Price)) %>%
     arrange(desc(Full_Price))
   df.date$Cumulative_Max <- cumsum(df.date$Q_Max)
   
