@@ -14,7 +14,7 @@ for (i in 1:length(unique(df.tix$Date))) {
   print(date)
   df.date <- filter(df.tix, Date == date) %>% 
     group_by(UID) %>%
-    summarise(Q_Max = max(Q_Max), Full_Price = max(Full_Price)) %>%
+    summarise(Q_Max = sum(Q_Max), Full_Price = max(Full_Price)) %>%
     arrange(desc(Full_Price))
   df.date$Cumulative_Max <- cumsum(df.date$Q_Max)
   
