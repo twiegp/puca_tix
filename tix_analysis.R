@@ -38,7 +38,7 @@ price_plot <- ggplot(df.thresholds, aes(x=Date, y=Price, color=Threshold)) +
         legend.title = element_text(size=20),
         legend.text = element_text(size=10),
         strip.text = element_text(size=14)) +
-  xlim(as.Date("2017-02-01"),as.Date("2017-03-03")) +
+  xlim(as.Date("2017-02-01"),as.Date("2017-03-31")) +
   ylim(200,300) +
   geom_vline(xintercept=as.numeric(as.Date("2017-02-02")))
 
