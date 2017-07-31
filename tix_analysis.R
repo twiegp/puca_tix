@@ -26,6 +26,11 @@ for (i in 1:length(unique(df.tix$Date))) {
   }
 }
 
+df.th.flat <- spread(df.thresholds, Threshold, Price)
+colnames(df.th.flat) <- c("Date","T10","T100")
+df.th.flat <- mutate(df.th.flat, TDiff = T10-T100, PDiff10 = T10-lag(T10), PDiff100 = T100-lag(T100))
+df.lagged <- gather(df.th.flat[,c("TDiff","PDiff10","PDiff100")], Q, PDiff, -TDiff)
+
 price_plot <- ggplot(df.thresholds, aes(x=Date, y=Price, color=Threshold)) +
   geom_point() +
   geom_smooth() +
@@ -39,6 +44,23 @@ price_plot <- ggplot(df.thresholds, aes(x=Date, y=Price, color=Threshold)) +
         legend.text = element_text(size=10),
         strip.text = element_text(size=14)) +
   xlim(as.Date("2017-02-01"),as.Date(max(df.date$Date))) +
-  ylim(200,300)
+  ylim(200,400)
 
 ggsave("tix.png", price_plot, height = 8, width = 12)
+
+movement_plot <- ggplot(df.lagged, aes(x=TDiff, y=PDiff, color=Q)) +
+  geom_point() +
+  #geom_smooth() +
+  labs(x="T10-T100",y="Next Day Price Change",color="Type") +
+  ggtitle("Effects of T10/T100 Spread on Price Movement") +
+  theme(axis.title.x = element_text(size=12),
+        axis.text.x = element_text(size=10),
+        axis.text.y = element_text(size=10),
+        axis.title.y = element_text(size=12),
+        legend.title = element_text(size=20),
+        legend.text = element_text(size=10),
+        strip.text = element_text(size=14)) +
+  xlim(0, 60) +
+  ylim(-40,40)
+
+ggsave("movement.png", movement_plot, height = 8, width = 12)
