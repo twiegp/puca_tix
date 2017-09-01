@@ -3,13 +3,16 @@ library(tidyverse)
 thresholds <- c(10,100)
 blacklist.names <- c("500% BONUS ON TIX")
 blacklist.dates <- c("2017-02-10","2017-02-11")
+date.min <- c(as.Date("2017-04-01"))
 
 df.tix <- read.csv("output.csv", stringsAsFactors = FALSE)
 df.tix$Date <- as.Date(parse_datetime(as.character(df.tix$time)))
 df.tix$Full_Price <- ifelse(as.logical(df.tix$promoted), as.integer(df.tix$price), 100 + as.integer(df.tix$bounty))
 df.tix$balance <- as.integer(gsub(",","",df.tix$balance))
 
-df.tix <-  df.tix %>% filter(!(user %in% blacklist.names | as.character(Date) %in% blacklist.dates) & promoted == 'True')
+df.tix <-  df.tix %>% 
+  filter(!(user %in% blacklist.names | as.character(Date) %in% blacklist.dates) & promoted == 'True') %>% 
+  filter(Date >= date.min)
 
 df.thresholds <- tibble()
 
@@ -43,7 +46,7 @@ price_plot <- ggplot(df.thresholds, aes(x=Date, y=Price, color=Threshold)) +
         legend.title = element_text(size=20),
         legend.text = element_text(size=10),
         strip.text = element_text(size=14)) +
-  xlim(as.Date("2017-02-01"),as.Date(max(df.date$Date))) +
+  xlim(date.min,as.Date(max(df.date$Date))) +
   ylim(200,400)
 
 ggsave("tix.png", price_plot, height = 8, width = 12)
