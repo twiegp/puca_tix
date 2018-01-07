@@ -47,7 +47,7 @@ price_plot <- ggplot(df.thresholds, aes(x=Date, y=Price, color=Threshold)) +
         legend.text = element_text(size=10),
         strip.text = element_text(size=14)) +
   xlim(date.min,as.Date(max(df.date$Date))) +
-  ylim(200,400)
+  ylim(200, 500)
 
 ggsave("tix.png", price_plot, height = 8, width = 12)
 
