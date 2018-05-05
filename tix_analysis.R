@@ -3,7 +3,7 @@ library(tidyverse)
 thresholds <- c(10,100)
 blacklist.names <- c("500% BONUS ON TIX")
 blacklist.dates <- c("2017-02-10","2017-02-11")
-date.min <- c(as.Date("2017-02-01"))
+date.min <- c(as.Date("2017-12-01"))
 
 df.tix <- read.csv("output.csv", stringsAsFactors = FALSE)
 df.tix$Date <- as.Date(parse_datetime(as.character(df.tix$time)))
@@ -51,6 +51,32 @@ price_plot <- ggplot(df.thresholds, aes(x=Date, y=Price, color=Threshold)) +
 
 ggsave("tix.png", price_plot, height = 8, width = 12)
 
+# Users analysis
+date.min.senders <- c(as.Date("2018-04-01"))
+date.max.senders <- c(as.Date("2018-05-05"))
+
+df.traders <- read.csv("Site Comparison - Pucatrade.csv", stringsAsFactors = FALSE)
+
+df.traders$Date <- as.Date(parse_datetime(as.character(df.traders$Date), format = "%m/%d/%Y"))
+
+senders_plot <- ggplot(df.traders, aes(x=Date, y=PT.Senders)) +
+  geom_point() +
+  geom_smooth() +
+  labs(y="Unique Senders",x="Date") +
+  ggtitle("Unique PucaTrade Senders Per Day") +
+  theme(axis.title.x = element_text(size=12),
+        axis.text.x = element_text(size=10),
+        axis.text.y = element_text(size=10),
+        axis.title.y = element_text(size=12),
+        legend.title = element_text(size=20),
+        legend.text = element_text(size=10),
+        strip.text = element_text(size=14)) +
+  xlim(as.Date(date.min.senders),as.Date(date.max.senders)) +
+  ylim(0, 150)
+
+ggsave("senders.png", senders_plot, height = 8, width = 12)
+
+'
 movement_plot <- ggplot(df.lagged, aes(x=TDiff, y=PDiff, color=Q)) +
   geom_point() +
   #geom_smooth() +
@@ -67,3 +93,4 @@ movement_plot <- ggplot(df.lagged, aes(x=TDiff, y=PDiff, color=Q)) +
   ylim(-40,40)
 
 ggsave("movement.png", movement_plot, height = 8, width = 12)
+'
