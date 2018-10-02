@@ -3,7 +3,7 @@ library(tidyverse)
 thresholds <- c(10,100)
 blacklist.names <- c("500% BONUS ON TIX")
 blacklist.dates <- c("2017-02-10","2017-02-11")
-date.min <- c(as.Date("2018-03-01"))
+date.min <- c(as.Date("2018-04-01"))
 
 df.tix <- read.csv("output.csv", stringsAsFactors = FALSE)
 df.tix$Date <- as.Date(parse_datetime(as.character(df.tix$time)))
