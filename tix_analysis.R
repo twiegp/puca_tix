@@ -3,7 +3,7 @@ library(tidyverse)
 thresholds <- c(10,100)
 blacklist.names <- c("500% BONUS ON TIX")
 blacklist.dates <- c("2017-02-10","2017-02-11")
-date.min <- c(as.Date("2018-04-01"))
+date.min <- c(as.Date("2018-05-01"))
 
 df.tix <- read.csv("output.csv", stringsAsFactors = FALSE)
 df.tix$Date <- as.Date(parse_datetime(as.character(df.tix$time)))
@@ -47,7 +47,7 @@ price_plot <- ggplot(df.thresholds, aes(x=Date, y=Price, color=Threshold)) +
         legend.text = element_text(size=10),
         strip.text = element_text(size=14)) +
   xlim(date.min,as.Date(max(df.date$Date))) +
-  ylim(200, 500)
+  ylim(150, 350)
 
 ggsave("tix.png", price_plot, height = 8, width = 12)
 
